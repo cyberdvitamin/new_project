@@ -47,19 +47,6 @@ class Player:
         Player.x = x - 32
         Player.y = y - 32
 
-    '''def keyboard_move():
-        if event.key == pygame.K_UP or event.key == pygame.K_w:
-            Player.y_change = -10
-        if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-            Player.y_change = 10
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-            Player.y_change = -10
-        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-            Player.y_change = 10
-        if event.key == pygame.K_SPACE:
-            if Bullet.state == "ready":
-                Bullet.sound()'''
-
 # Enemy
 class Enemy:
     x = []
@@ -86,7 +73,6 @@ class Enemy:
         else:
             return False
 
-
 # Ready - You can't see the bullet on the screen
 # Fire - The bullet is currently moving
 
@@ -104,7 +90,6 @@ class Bullet:
         self.y += self.y_change
 
     def fire(x, y):
-        Bullet.state
         Bullet.state = "fire"
         screen.blit(Bullet.image, (x + 16, y + 10))
 
@@ -136,20 +121,17 @@ class Score:
         score = Score.font.render('Score: ' + str(Score.score_value), True, (0, 128, 0))
         screen.blit(score, (x, y))
 
+# Game Over
+class GameOver:
+    over_font = pygame.font.Font('assets/fonts/buttershine.otf', 64)
+    game_over = False
 
-# Game Over text
-over_font = pygame.font.Font('assets/fonts/buttershine.otf', 64)
-game_over = False
-
-
-def game_over_text(x, y):
-    global game_over
-    over_text = over_font.render('GAME OVER', True, (255, 0, 0))
-    screen.blit(over_text, (440, 296))
-    over_text = over_font.render('Press R to Play again!', True, (0, 128, 0))
-    screen.blit(over_text, (300, 396))
-    game_over = True
-
+    def game_over_text(x, y):
+        over_text = GameOver.over_font.render('GAME OVER', True, (255, 0, 0))
+        screen.blit(over_text, (440, 296))
+        over_text = GameOver.over_font.render('Press R to Play again!', True, (0, 128, 0))
+        screen.blit(over_text, (300, 396))
+        GameOver.game_over = True
 
 # Game Loop
 running = True
@@ -171,17 +153,8 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 running = False
 
-
         # if keystroke is pressed check whether it's right or left
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP or event.key == pygame.K_w:
-                Player.y_change = -10
-            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                Player.y_change = 10
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                Player.y_change = -10
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                Player.y_change = 10
             if event.key == pygame.K_SPACE:
                 if Bullet.state == "ready":
                     Bullet.sound()
@@ -189,22 +162,13 @@ while running:
                 if Bullet.state == "ready":
                     Bullet.sound()
 
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_w or event.key == pygame.K_s:
-                Player.y_change = 0
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                Player.x_change = 0
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_a or event.key == pygame.K_d:
-                Player.x_change = 0
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_r and game_over:
+        '''if event.type == pygame.KEYUP:
+            if event.key == pygame.K_r and GameOver.game_over:
                 for i in range(Enemy.num_of_enemies):
                     Enemy.image.append(pygame.image.load("assets/images/enemy.png"))
                     Enemy.x.append(random.randint(0, 1216))
                     Enemy.y.append(random.randint(50, 320))
-                game_over = False
+                GameOver.game_over = False'''
 
     # Checking for boundaries of spaceship, so it doesn't go out of bounds
     Player.x += Player.x_change
@@ -227,9 +191,9 @@ while running:
         if Enemy.y[i] > 656 or collisionPlayer:
             for j in range(Enemy.num_of_enemies):
                 Enemy.y[j] = 2000
-                game_over_text(640, 360)
+                GameOver.game_over_text(640, 360)
                 break
-            game_over_text(640, 360)
+            GameOver.game_over_text(640, 360)
             break
 
         Enemy.x[i] += Enemy.x_change[i]
